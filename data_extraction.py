@@ -1,5 +1,6 @@
 import pandas as pd 
 from database_utility import DatabaseConnector
+import tabula
 
 class DataExtractor:
     def __init__(self, db_connector):
@@ -14,6 +15,11 @@ class DataExtractor:
             return df
         else:
             raise ValueError(f'Table {table_name} not found.')
+
+    def retrieve_pdf_data(self,URL):
+        dfs = tabula.read_pdf(URL, pages='all', multiple_tables=True)
+        concatenated_df = pd.concat(dfs, ignore_index=True)
+        return concatenated_df
 
 
 
