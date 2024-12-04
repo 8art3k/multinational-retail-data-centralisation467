@@ -20,7 +20,7 @@ def user_data():
 
     new_table_name = 'dim_users'
     db_connector_target.upload_to_db(cleaned_data, new_table_name, engine_target, if_exists='replace')
-    print(f"Data from 'legacy_users' has been cleaned and uploaded to '{new_table_name}'")
+    print(f'Data from "legacy_users" has been cleaned and uploaded to "{new_table_name}"')
 
 # user_data()
 
