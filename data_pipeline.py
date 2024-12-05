@@ -121,5 +121,5 @@ def sales_data():
     db_connector_target.upload_to_db(cleaned_df, new_table_name, engine_target, if_exists='replace')
     print(f'Sales data uploaded to "{new_table_name}"')
 
-sales_data()
+# sales_data()
     
