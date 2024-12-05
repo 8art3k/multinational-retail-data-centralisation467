@@ -20,3 +20,15 @@ class DataCleaning:
         print('Cleaning complete')
         return self.df
     
+    def clean_store_data(self):
+        self.df.drop(columns=['lat'], inplace=True)
+        self.df.replace('NULL', np.nan, inplace=True)
+        self.df['opening_date'] = pd.to_datetime(self.df['opening_date'], errors='coerce')     
+        self.df = self.df[self.df['opening_date'].notna()]
+        self.df.dropna(inplace=True)
+        self.df.replace('NULL', np.nan, inplace=True)
+        self.df['staff_numbers'] = self.df['staff_numbers'].astype(str).str.replace(r'\D', '', regex=True)
+        self.df['continent'] = self.df['continent'].str.strip()
+        self.df['continent'] = self.df['continent'].replace({'eeEurope': 'Europe', 'eeAmerica': 'America'})
+        print(self.df['continent'].unique())
+        return self.df
