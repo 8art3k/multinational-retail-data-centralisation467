@@ -104,4 +104,22 @@ def product_orders_data():
     db_connector.upload_to_db(cleaned_orders_data, new_table_name, engine_target, if_exists='replace')
     print(f'Orders data cleaned and uploaded to "{new_table_name}".')
 
-product_orders_data()
+# product_orders_data()
+
+def sales_data():
+    data_extractor = DataExtractor(db_connector=None, api_key=None)
+    sales_df = data_extractor.extract_from_s3_to_json() 
+
+    data_cleaning = DataCleaning(sales_df)
+    cleaned_df = data_cleaning.clean_sales_data()
+
+    yaml_file_path_target = 'db_creds_target.yaml'
+    db_connector_target = DatabaseConnector(yaml_file_path_target)
+    engine_target = db_connector_target.init_db_engine()
+
+    new_table_name = 'dim_date_times'
+    db_connector_target.upload_to_db(cleaned_df, new_table_name, engine_target, if_exists='replace')
+    print(f'Sales data uploaded to "{new_table_name}"')
+
+sales_data()
+    

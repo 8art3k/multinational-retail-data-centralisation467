@@ -60,5 +60,12 @@ class DataExtractor:
         df = pd.read_csv(local_file_path)
         return df
     
+    def  extract_from_s3_to_json(self):
+        s3 = boto3.client('s3')
+        bucket_name = 'data-handling-public' # static bucket name due to connection error
+        file_key = 'date_details.json' # static file name due to connection error
+        file = s3.get_object(Bucket=bucket_name, Key=file_key)
+        df = pd.read_json(file['Body'])
+        return df
   
 

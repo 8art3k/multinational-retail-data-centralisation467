@@ -16,7 +16,7 @@ class DataCleaning:
         self.df.replace('NULL', np.nan, inplace=True)
         self.df.dropna(inplace=True)
         self.df.drop_duplicates(subset=['card_number'], keep='first',inplace=True)
-        self.df[self.df['card_number'].apply(lambda character: str(character).isdigit())]
+        self.df = self.df[self.df['card_number'].apply(lambda character: str(character).isdigit())]
         self.df['date_payment_confirmed'] = pd.to_datetime(self.df['date_payment_confirmed'], errors='coerce')
         return self.df
     
@@ -74,4 +74,9 @@ class DataCleaning:
         self.df.drop(columns=['first_name'], inplace=True)
         self.df.drop(columns=['last_name'], inplace=True) 
         self.df.drop(columns=['1'], inplace=True)   
+        return self.df
+    
+    def clean_sales_data(self):
+        valid_time_periods = ['Morning', 'Late_Hours', 'Midday', 'Evening']
+        self.df = self.df[self.df['time_period'].isin(valid_time_periods)]
         return self.df
