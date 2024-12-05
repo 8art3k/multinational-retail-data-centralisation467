@@ -4,6 +4,7 @@ from data_cleaning import DataCleaning
 import tabula
 import requests
 import pandas as pd 
+import re
 
 def user_data():
     yaml_file_path = 'db_creds.yaml'
@@ -59,7 +60,6 @@ def store_details():
 
     data_cleaning = DataCleaning(stores_df)
     cleaned_stores_df = data_cleaning.clean_store_data()
-    print(cleaned_stores_df.info())
 
     new_table_name = 'dim_store_details'
     db_connector_target.upload_to_db(cleaned_stores_df, new_table_name, engine_target, if_exists='replace')
@@ -67,4 +67,20 @@ def store_details():
 
 # store_details()
    
-  
+def product_data():
+    yaml_file_path_target = 'db_creds_target.yaml'
+    db_connector_target = DatabaseConnector(yaml_file_path_target)
+    engine_target = db_connector_target.init_db_engine()
+
+    s3_url = 's3://data-handling-public/products.csv'
+    data_extractor = DataExtractor(db_connector=None, api_key=None)  
+    product_data_df = data_extractor.extract_from_s3(s3_url)
+
+    data_cleaning = DataCleaning(product_data_df)  
+    cleaned_product_data = data_cleaning.clean_products_data()
+
+    new_table_name = 'dim_products'
+    db_connector_target.upload_to_db(cleaned_product_data, new_table_name, engine_target, if_exists='replace')
+    print(f'Data from S3 has been cleaned and uploaded to "{new_table_name}"')
+
+# product_data()

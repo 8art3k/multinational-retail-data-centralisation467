@@ -3,6 +3,7 @@ import numpy as np
 from database_utility import DatabaseConnector
 import tabula
 import requests
+import boto3
 
 class DataExtractor:
     def __init__(self, db_connector, api_key): 
@@ -49,4 +50,15 @@ class DataExtractor:
  
         stores_df = pd.DataFrame(stores_data)
         return stores_df
+
+    def extract_from_s3(self,s3_url):
+        s3 = boto3.client('s3')
+        bucket_name = s3_url.split('/')[2]
+        file_key = '/'.join(s3_url.split('/')[3:])
+        local_file_path = 'C:/Users/Wupees/AiCore/products.csv'
+        s3.download_file(bucket_name, file_key, local_file_path)
+        df = pd.read_csv(local_file_path)
+        return df
+    
+  
 
