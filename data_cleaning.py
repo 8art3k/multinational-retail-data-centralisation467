@@ -3,7 +3,7 @@ import numpy as np
 import re
 
 class DataCleaning:
-    def __init__(self,df):
+    def __init__(self,df):   
         self.df = df
         
     def clean_user_data(self):
@@ -32,7 +32,7 @@ class DataCleaning:
         self.df['continent'] = self.df['continent'].replace({'eeEurope': 'Europe', 'eeAmerica': 'America'})
         return self.df
        
-    def convert_product_weights(self, df):
+    def convert_product_weights(self):
         for row, weight in self.df['weight'].items():
             if pd.isna(weight):
                 continue 
@@ -68,4 +68,10 @@ class DataCleaning:
         self.df.replace('NULL', np.nan, inplace=True)
         self.df.dropna(inplace=True)
         self.df = self.convert_product_weights(self.df)
+        return self.df
+    
+    def clean_orders_data(self):
+        self.df.drop(columns=['first_name'], inplace=True)
+        self.df.drop(columns=['last_name'], inplace=True) 
+        self.df.drop(columns=['1'], inplace=True)   
         return self.df

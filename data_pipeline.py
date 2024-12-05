@@ -84,3 +84,24 @@ def product_data():
     print(f'Data from S3 has been cleaned and uploaded to "{new_table_name}"')
 
 # product_data()
+
+def product_orders_data():
+    yaml_file_path = 'db_creds.yaml'  
+    db_connector = DatabaseConnector(yaml_file_path)
+    engine = db_connector.init_db_engine()       
+    data_extractor = DataExtractor(db_connector, api_key=None)
+    table_name = 'orders_table'
+    orders_table_df = data_extractor.read_rds_table(table_name, engine)
+  
+    data_cleaning = DataCleaning(orders_table_df)
+    cleaned_orders_data = data_cleaning.clean_orders_data()
+
+    yaml_file_path_target = 'db_creds_target.yaml'
+    db_connector_target = DatabaseConnector(yaml_file_path_target)
+    engine_target = db_connector_target.init_db_engine()
+
+    new_table_name = 'orders_table'
+    db_connector.upload_to_db(cleaned_orders_data, new_table_name, engine_target, if_exists='replace')
+    print(f'Orders data cleaned and uploaded to "{new_table_name}".')
+
+product_orders_data()
