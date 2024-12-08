@@ -6,10 +6,10 @@ import requests
 import boto3
 
 class DataExtractor:
-    def __init__(self, db_connector, api_key): 
+    def __init__(self, db_connector=None, api_key=None): 
         self.db_connector = db_connector
         self.api_key = api_key
-        self.headers = {'x-api-key': self.api_key}
+        self.headers = {'x-api-key': self.api_key} if self.api_key else None
                   
     def read_rds_table(self, table_name, engine):
         tables = self.db_connector.list_db_tables(engine)
@@ -51,7 +51,7 @@ class DataExtractor:
         stores_df = pd.DataFrame(stores_data)
         return stores_df
 
-    def extract_from_s3(self,s3_url):
+    def extract_from_s3(self, s3_url):
         s3 = boto3.client('s3')
         bucket_name = s3_url.split('/')[2]
         file_key = '/'.join(s3_url.split('/')[3:])
@@ -59,13 +59,11 @@ class DataExtractor:
         s3.download_file(bucket_name, file_key, local_file_path)
         df = pd.read_csv(local_file_path)
         return df
-    
-    def  extract_from_s3_to_json(self):
+     
+    def  extract_from_s3_to_json(self, s3_url):
         s3 = boto3.client('s3')
-        bucket_name = 'data-handling-public' # static bucket name due to connection error
-        file_key = 'date_details.json' # static file name due to connection error
+        bucket_name = s3_url.split('/')[2].split('.')[0]
+        file_key = '/'.join(s3_url.split('/')[3:])
         file = s3.get_object(Bucket=bucket_name, Key=file_key)
-        df = pd.read_json(file['Body'])
+        df = pd.read_json(file['Body'])  
         return df
-  
-

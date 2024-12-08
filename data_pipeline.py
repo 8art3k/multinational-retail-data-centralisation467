@@ -107,8 +107,11 @@ def product_orders_data():
 # product_orders_data()
 
 def sales_data():
-    data_extractor = DataExtractor(db_connector=None, api_key=None)
-    sales_df = data_extractor.extract_from_s3_to_json() 
+    s3_url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json'
+    db_connector = None 
+    api_key = None 
+    data_extractor = DataExtractor(db_connector, api_key)
+    sales_df = data_extractor.extract_from_s3_to_json(s3_url) 
 
     data_cleaning = DataCleaning(sales_df)
     cleaned_df = data_cleaning.clean_sales_data()

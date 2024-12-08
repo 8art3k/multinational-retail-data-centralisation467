@@ -67,7 +67,7 @@ class DataCleaning:
     def clean_products_data(self):
         self.df.replace('NULL', np.nan, inplace=True)
         self.df.dropna(inplace=True)
-        self.df = self.convert_product_weights(self.df)
+        self.df = self.convert_product_weights()
         return self.df
     
     def clean_orders_data(self):
