@@ -1,12 +1,12 @@
-from database_utility import DatabaseConnector
-from data_extraction import DataExtractor
-from data_cleaning import DataCleaning
-import tabula
-import requests
 import pandas as pd 
 import re
+import requests
+import tabula
+from data_extraction import DataExtractor
+from data_cleaning import DataCleaning
+from database_utility import DatabaseConnector
 
-def user_data():
+def user_data():    # extracts user data from the 'legacy_users' table, cleans it, and uploads it to the 'dim_users' table
     yaml_file_path = 'db_creds.yaml'
     db_connector = DatabaseConnector(yaml_file_path)
     engine = db_connector.init_db_engine()  
@@ -25,9 +25,9 @@ def user_data():
     db_connector_target.upload_to_db(cleaned_data, new_table_name, engine_target, if_exists='replace')
     print(f'Data from "legacy_users" has been cleaned and uploaded to "{new_table_name}"')
 
-# user_data()
+#  user_data()
 
-def card_details_pdf():
+def card_details_pdf(): # extracts card details from a PDF file, cleans the data, and uploads it to the 'dim_card_details' table
     yaml_file_path_target = 'db_creds_target.yaml'
     db_connector_target = DatabaseConnector(yaml_file_path_target)
     engine_target = db_connector_target.init_db_engine()
@@ -44,9 +44,9 @@ def card_details_pdf():
     db_connector_target.upload_to_db(cleaned_card_data, new_table_name, engine_target, if_exists='replace')
     print(f'Data from the PDF has been cleaned and uploaded to "{new_table_name}"')
 
-# card_details_pdf()
+#  card_details_pdf()
 
-def store_details():
+def store_details():    # extracts store details from an API, cleans the data, and uploads it to the 'dim_store_details' table
     yaml_file_path_target = 'db_creds_target.yaml'
     db_connector_target = DatabaseConnector(yaml_file_path_target)
     engine_target = db_connector_target.init_db_engine()
@@ -65,9 +65,9 @@ def store_details():
     db_connector_target.upload_to_db(cleaned_stores_df, new_table_name, engine_target, if_exists='replace')
     print(f'Data from the store API has been cleaned and uploaded to "{new_table_name}"')
 
-# store_details()
+#  store_details()
    
-def product_data():
+def product_data(): # extracts product data from an S3 bucket, cleans the data, and uploads it to the 'dim_products' table
     yaml_file_path_target = 'db_creds_target.yaml'
     db_connector_target = DatabaseConnector(yaml_file_path_target)
     engine_target = db_connector_target.init_db_engine()
@@ -83,9 +83,9 @@ def product_data():
     db_connector_target.upload_to_db(cleaned_product_data, new_table_name, engine_target, if_exists='replace')
     print(f'Data from S3 has been cleaned and uploaded to "{new_table_name}"')
 
-# product_data()
+#  product_data()
 
-def product_orders_data():
+def product_orders_data():  # extracts product orders data from the 'orders_table', cleans it, and uploads it to the 'orders_table' table
     yaml_file_path = 'db_creds.yaml'  
     db_connector = DatabaseConnector(yaml_file_path)
     engine = db_connector.init_db_engine()       
@@ -104,9 +104,9 @@ def product_orders_data():
     db_connector.upload_to_db(cleaned_orders_data, new_table_name, engine_target, if_exists='replace')
     print(f'Orders data cleaned and uploaded to "{new_table_name}".')
 
-# product_orders_data()
+#  product_orders_data()
 
-def sales_data():
+def sales_data():   # extracts sales data from an S3 URL (JSON format), cleans it, and uploads it to the 'dim_date_times' table
     s3_url = 'https://data-handling-public.s3.eu-west-1.amazonaws.com/date_details.json'
     db_connector = None 
     api_key = None 
@@ -124,5 +124,5 @@ def sales_data():
     db_connector_target.upload_to_db(cleaned_df, new_table_name, engine_target, if_exists='replace')
     print(f'Sales data uploaded to "{new_table_name}"')
 
-# sales_data()
+#  sales_data()
     

@@ -1,18 +1,18 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 import re
 
-class DataCleaning:
-    def __init__(self,df):   
+class DataCleaning:     # class for data cleaning
+    def __init__(self,df):   # initializes the DataCleaning clas with a DataFrame
         self.df = df
         
-    def clean_user_data(self):
+    def clean_user_data(self):  # cleans the user data by replacing 'NULL' with NaN, droppping rows with NaN values, convers the 'join_date' column to a datetime format
         self.df.replace('NULL', np.nan, inplace=True)
         self.df.dropna(inplace=True)
         self.df['join_date'] = pd.to_datetime(self.df['join_date'], errors='coerce')
         return self.df
     
-    def clean_card_data(self):
+    def clean_card_data(self):  # cleans the card data by replacing 'NULL' with NaN, dropping rows with NaN values, removes duplicate rows based on 'card_number', filters for valid numeric 'card_number' values, and converts 'date_payment_confirmed' column to a datetime format
         self.df.replace('NULL', np.nan, inplace=True)
         self.df.dropna(inplace=True)
         self.df.drop_duplicates(subset=['card_number'], keep='first',inplace=True)
@@ -20,7 +20,7 @@ class DataCleaning:
         self.df['date_payment_confirmed'] = pd.to_datetime(self.df['date_payment_confirmed'], errors='coerce')
         return self.df
     
-    def clean_store_data(self):
+    def clean_store_data(self): # cleans the store data by removing the 'lat' column, replacing 'NULL' with NaN, converting the 'opening_date' column to a datetime format, filtering out rows with invalid 'opening_date', cleaning 'staff_numbers' by removing non-digit characters, and normalizing the 'continent' column
         self.df.drop(columns=['lat'], inplace=True) # drop 'lat' column as mostly empty
         self.df.replace('NULL', np.nan, inplace=True)
         self.df['opening_date'] = pd.to_datetime(self.df['opening_date'], errors='coerce')     
@@ -32,7 +32,7 @@ class DataCleaning:
         self.df['continent'] = self.df['continent'].replace({'eeEurope': 'Europe', 'eeAmerica': 'America'})
         return self.df
        
-    def convert_product_weights(self):
+    def convert_product_weights(self):  # converts product weight values to a consistent format in kilograms (kg)
         for row, weight in self.df['weight'].items():
             if pd.isna(weight):
                 continue 
@@ -64,19 +64,19 @@ class DataCleaning:
                     self.df.loc[row, 'weight'] = None  
         return self.df
     
-    def clean_products_data(self):
+    def clean_products_data(self):  # cleans the products data by replacing 'NULL' with NaN, dropping rows with NaN values, and converting the 'weight' column to a consistent format in kilograms
         self.df.replace('NULL', np.nan, inplace=True)
         self.df.dropna(inplace=True)
         self.df = self.convert_product_weights()
         return self.df
     
-    def clean_orders_data(self):
+    def clean_orders_data(self):    # cleans the orders data by dropping 'first_name', 'last_name', '1' columns
         self.df.drop(columns=['first_name'], inplace=True)
         self.df.drop(columns=['last_name'], inplace=True) 
         self.df.drop(columns=['1'], inplace=True)   
         return self.df
     
-    def clean_sales_data(self):
+    def clean_sales_data(self): # cleans the sales data by filtering rows based on valid time periods
         valid_time_periods = ['Morning', 'Late_Hours', 'Midday', 'Evening']
         self.df = self.df[self.df['time_period'].isin(valid_time_periods)]
         return self.df
