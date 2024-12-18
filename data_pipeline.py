@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd 
 import re
 import requests
@@ -65,7 +66,7 @@ def store_details():    # extracts store details from an API, cleans the data, a
     db_connector_target.upload_to_db(cleaned_stores_df, new_table_name, engine_target, if_exists='replace')
     print(f'Data from the store API has been cleaned and uploaded to "{new_table_name}"')
 
-#  store_details()
+store_details()
    
 def product_data(): # extracts product data from an S3 bucket, cleans the data, and uploads it to the 'dim_products' table
     yaml_file_path_target = 'db_creds_target.yaml'
@@ -83,7 +84,7 @@ def product_data(): # extracts product data from an S3 bucket, cleans the data, 
     db_connector_target.upload_to_db(cleaned_product_data, new_table_name, engine_target, if_exists='replace')
     print(f'Data from S3 has been cleaned and uploaded to "{new_table_name}"')
 
-#  product_data()
+# product_data()
 
 def product_orders_data():  # extracts product orders data from the 'orders_table', cleans it, and uploads it to the 'orders_table' table
     yaml_file_path = 'db_creds.yaml'  

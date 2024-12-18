@@ -21,15 +21,15 @@ class DataCleaning:     # class for data cleaning
         return self.df
     
     def clean_store_data(self): # cleans the store data by removing the 'lat' column, replacing 'NULL' with NaN, converting the 'opening_date' column to a datetime format, filtering out rows with invalid 'opening_date', cleaning 'staff_numbers' by removing non-digit characters, and normalizing the 'continent' column
-        self.df.drop(columns=['lat'], inplace=True) # drop 'lat' column as mostly empty
+        
         self.df.replace('NULL', np.nan, inplace=True)
-        self.df['opening_date'] = pd.to_datetime(self.df['opening_date'], errors='coerce')     
-        self.df = self.df[self.df['opening_date'].notna()] 
-        self.df.dropna(inplace=True)
-        self.df.replace('NULL', np.nan, inplace=True)
+        index_column = 'index'  
+        self.df.dropna(how='all', subset=[column for column in self.df.columns if column != index_column], inplace=True)
+        self.df['opening_date'] = pd.to_datetime(self.df['opening_date'], errors='coerce')       
         self.df['staff_numbers'] = self.df['staff_numbers'].astype(str).str.replace(r'\D', '', regex=True) # remove non-digit characters
         self.df['continent'] = self.df['continent'].str.strip() # strip white spaces
         self.df['continent'] = self.df['continent'].replace({'eeEurope': 'Europe', 'eeAmerica': 'America'})
+        self.df = self.df[self.df['continent'].isin(['Europe', 'America'])]
         return self.df
        
     def convert_product_weights(self):  # converts product weight values to a consistent format in kilograms (kg)
