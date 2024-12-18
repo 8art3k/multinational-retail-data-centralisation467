@@ -87,3 +87,5 @@ def update_dim_store_details_table():
 #  update_dim_store_details_table()
 
 '''Remaining tasks were completed directly in pgAdmin4 due to column types not updating when uploaded to the databse.'''
+
+

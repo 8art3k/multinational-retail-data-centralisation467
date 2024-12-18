@@ -66,7 +66,7 @@ def store_details():    # extracts store details from an API, cleans the data, a
     db_connector_target.upload_to_db(cleaned_stores_df, new_table_name, engine_target, if_exists='replace')
     print(f'Data from the store API has been cleaned and uploaded to "{new_table_name}"')
 
-store_details()
+# store_details()
    
 def product_data(): # extracts product data from an S3 bucket, cleans the data, and uploads it to the 'dim_products' table
     yaml_file_path_target = 'db_creds_target.yaml'
