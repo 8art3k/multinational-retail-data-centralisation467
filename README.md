@@ -32,7 +32,10 @@ These primary keys now match the corresponding columns in the orders_table, whic
 Using SQL, the respective columns in the dim_ tables were updated to become primary key columns.
 Foreign Keys were then added to the orders_table to reference the primary keys of the dim_ tables.
 ## Data Cleanup for Foreign Key Relationships:
-While adding foreign key constraints, rows with data missing in the dim_ tables had to be deleted from the orders_table to avoid errors.
+While adding foreign key constraints, rows with data missing in the dim_tables had to be deleted from the orders_table to avoid errors.
+
+## SQL Analysis:
+The SQL queries performed on the database helped answer several business-related questions and provided useful insights into the sales data, such as the count of physical stores by country excluding Web Portals, the total store count by locality, total sales by month, sales numbers split between online and offline stores, the percentage of total sales by store type, total sales by year and month, staff count by country, sales by store type in Germany, and the average time between consecutive sales transactions.
 
 ### Aim:
 The aim of the project is to streamline the process of data cleaning and make it reusable across various data sets with a structured and automated pipeline.
@@ -42,3 +45,4 @@ The aim of the project is to streamline the process of data cleaning and make it
 - How to interact with an S3 bucket, perform transformations, and then load the cleaned data to a relational database like PostgreSQL.
 - How to structure data cleaning pipelines using object-oriented principles.
 - How to maintain data integrity by adding primary and foreign keys, ensuring consistency across relational tables in a star-based schema.
+- How to write complex SQL queries to analyse data, perform aggregations, calculate percentages, and filter data based on specific conditions to derive business    insights.
